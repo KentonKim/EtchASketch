@@ -9,7 +9,7 @@ body {
 
 /* Grid and boxes */
 .grid {
-    border: 2px solid black;
+    border: 10px solid brown;
     background-color: burlywood;
     display: flex;
     flex-flow: wrap;
@@ -22,7 +22,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 20px;
 }
 
 .innerbox {

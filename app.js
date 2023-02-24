@@ -1,7 +1,7 @@
 const gridDiv = document.querySelector('.grid')
 const style = getComputedStyle(gridDiv, 'width')
 const gridWidth = 960
-const dimension = 8
+const dimension = 20
 const boxWidth = (100/dimension).toString() + "%"
 
 gridDiv.style.width = (gridWidth).toString() + 'px'
@@ -32,13 +32,13 @@ function hoverEffect(e) {
         {offset: 0.99, backgroundColor: 'rosybrown'},
         {offset: 0.99, transform: 'translateY(0px)'},
     ], {
-        duration: 2000
+        duration: 1000
     }) 
     e.target.animate([
         {offset: 0.5, backgroundColor: 'skyblue'},
         {offset: 0.99, backgroundColor: 'burlywood'},
     ], {
-        duration: 2000
+        duration: 1000
     }) 
 
 }
