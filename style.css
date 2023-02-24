@@ -1,0 +1,30 @@
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+/* Grid and boxes */
+.grid {
+    border: 2px solid black;
+    background-color: gainsboro;
+    display: flex;
+    flex-flow: wrap;
+}
+
+.box {
+    box-sizing: border-box;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.innerbox {
+    width: 90%;
+    height: 90%;
+    background-color: rosybrown;
+}
