@@ -5,15 +5,18 @@ html {
 body {
     display: flex;
     justify-content: center;
+    flex-flow: wrap;
+    height: 100%;
 }
 
 /* Grid and boxes */
 .grid {
     border: 10px solid brown;
     background-color: burlywood;
-    display: flex;
-    flex-flow: wrap;
-    transform: scale(1,0.5) rotate(45deg);
+    display: grid;
+    flex-shrink: 0;
+    grid-auto-flow: row;
+    animation: changecolor 10s infinite;
 }
 
 .box {
@@ -22,13 +25,21 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .innerbox {
     width: 90%;
     height: 90%;
-    background-color: rosybrown;
-    border: 1px solid brown;
+    border: 1px solid lightblue;
     border-radius: 5px;
+    animation: changecolor 10s infinite;
+}
+
+@keyframes changecolor {
+  0% {background-color: #F7C8E0;}
+  25%{background-color: #DFFFD8;}
+  50%{background-color: #B4E4FF;}
+  75%{background-color: #95BDFF;}
+  100% {background-color: #F7C8E0;}
 }
