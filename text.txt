@@ -1,2 +1,16 @@
 depending on the number of boxes, it matches the width and height of it 
 
+
+objective:
+- don't get caught by enemy
+- get keys?
+
+
+Map:
+- randomly generated?
+- Walls 
+- Tiles that are louder than others
+- items
+
+Mechanic:
+- You leave a scent trail ?
