@@ -7,16 +7,20 @@ body {
     justify-content: center;
     flex-flow: wrap;
     height: 100%;
+    background-color: black;
 }
 
 /* Grid and boxes */
 .grid {
-    border: 10px solid brown;
+    border: 10px solid black;
     background-color: burlywood;
     display: grid;
     flex-shrink: 0;
     grid-auto-flow: row;
-    animation: changecolor 10s infinite;
+    animation: changecolor 11s infinite;
+    /*
+    transform: scale(1,0.5) rotate(45deg);
+    */
 }
 
 .box {
@@ -31,7 +35,7 @@ body {
 .innerbox {
     width: 90%;
     height: 90%;
-    border: 1px solid lightblue;
+    /*border: 1px solid lightblue;*/
     border-radius: 5px;
     animation: changecolor 10s infinite;
 }
