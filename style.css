@@ -13,14 +13,11 @@ body {
 /* Grid and boxes */
 .grid {
     border: 10px solid black;
-    background-color: burlywood;
+    background-color: gray;
     display: grid;
     flex-shrink: 0;
     grid-auto-flow: row;
-    animation: changecolor 11s infinite;
-    /*
     transform: scale(1,0.5) rotate(45deg);
-    */
 }
 
 .box {
@@ -33,10 +30,15 @@ body {
 }
 
 .innerbox {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     /*border: 1px solid lightblue;*/
     border-radius: 5px;
+    background-color: black;
+    /*animation: changecolor 10s infinite;*/
+}
+
+.animate {
     animation: changecolor 10s infinite;
 }
 
@@ -47,3 +49,16 @@ body {
   75%{background-color: #95BDFF;}
   100% {background-color: #F7C8E0;}
 }
+
+/* Color classes */
+.white {
+    background-color: white;
+}
+.black {
+    background-color: black;
+}
+.white {
+    background-color: white;
+}
+
+
