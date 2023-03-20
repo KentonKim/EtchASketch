@@ -1,6 +1,6 @@
 const grid = document.querySelector('.grid');
 const button = document.querySelector('#bttn__updategrid');
-const GRIDWIDTH = 960;
+const GRIDWIDTH = 700;
 const DIMENSION = 10;
 const BOXWIDTH = (100/DIMENSION).toString() + "%";
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
@@ -68,7 +68,7 @@ function hoverEffect(targ) {
         }, HOVER_DURATION);
     }
 }
-
+/*
 function rippleEvent(e) {
     let RIPPlE_DURATION = 80;
     let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
@@ -145,7 +145,7 @@ function rippleEvent(e) {
         }
    }
 }
-
+*/
 function fillColorEffect(targ,color) {
     if (color == 'black') {
         targ.style.backgroundColor = "black";
@@ -158,18 +158,26 @@ function fillColorEffect(targ,color) {
         let randomColor = Math.floor(Math.random() * 7);
         targ.style.backgroundColor = colorArray[randomColor];
         */
-        targ.classList.add('animate');
+        if (targ.classList.contains('animate')) {
+            targ.style.animation = "none"
+            setTimeout(() => {
+                targ.style.animation = ""
+            }, 10);
+        }
+        else {
+            targ.classList.add('animate');
+        }
+
     }
 }
 
 button.addEventListener('click',eraseGrid)
 
 function eraseGrid() {
-    let eraseDelayMillisecond = 10
+    let eraseDelayMillisecond = 0
     for (let i = 0; i < DIMENSION**2; i++) {
-        eraseDelayMillisecond += 10 
+        eraseDelayMillisecond += 1000/(DIMENSION**2) 
         setTimeout(() => {
-            console.log(eraseDelayMillisecond)
             innerBoxArray[i].style.backgroundColor = 'transparent';
             if (innerBoxArray[i].classList.contains('animate')){
                 innerBoxArray[i].classList.remove('animate')
@@ -177,3 +185,56 @@ function eraseGrid() {
         }, eraseDelayMillisecond);
     }
 }
+
+function rippleEvent(e) {
+    let RIPPlE_DURATION = 80;
+    let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
+    // tl, tr, bl, br
+    let cornerArray = [startNum,startNum,startNum,startNum];
+    let validCorners = 4;
+    let validCornerArray = [1,1,1,1];
+
+    while (validCorners > 0) {
+        for (let i = 0; i < 4; i++) {
+            if (validCornerArray[i] == 1) {
+                if (i == 0){
+                    cornerArray[i] -= DIMENSION+1
+                    if ((cornerArray[i]+1) % DIMENSION == 0 || cornerArray[i] < 0){
+                        validCornerArray[i] = 0
+                        validCorners -= 1
+                    }            
+                }
+                else if (i == 1){
+                    cornerArray[i] -= DIMENSION-1
+                    if (cornerArray[i] % DIMENSION == 0 || cornerArray[i] < 0){
+                        validCornerArray[i] = 0
+                        validCorners -= 1
+                    }
+                }
+                else if (i == 2){
+                    cornerArray[i] += DIMENSION-1
+                    if ((cornerArray[i]+1) % DIMENSION == 0 || cornerArray[i] >= DIMENSION**2){
+                        validCornerArray[i] = 0
+                        validCorners -= 1
+                    }
+                }
+                else if (i == 3){
+                    cornerArray[i] += DIMENSION+1
+                    if (cornerArray[i] % DIMENSION == 0 || cornerArray[i] >= DIMENSION**2){
+                        validCornerArray[i] = 0
+                        validCorners -= 1
+                    }
+                }
+            }
+        }
+        // 
+        for (let i = 0; i < 5; i++) {
+            if (validCornerArray[i] == 1){
+                console.log(validCornerArray[i])
+                console.log(cornerArray[i])
+                hoverEffect(innerBoxArray[cornerArray[i]])
+            }
+        }
+    }
+}
+
