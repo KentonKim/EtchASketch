@@ -42,7 +42,7 @@ const BoxArray = document.querySelectorAll('.box');
 const innerBoxArray = document.querySelectorAll('.innerbox');
 
 function hoverEvent(e) {
-    hoverEffect(e.target);
+    hoverEffect(e.target,150);
 }
 
 function fillColorEvent(e) {
@@ -54,98 +54,20 @@ function fillColorEvent(e) {
     }
 }
 
-function hoverEffect(targ) {
-    let HOVER_DURATION = 150;
+function hoverEffect(targ,durationMillisecond) {
     if (!targ.classList.contains('hovering')) {
         targ.classList.add('hovering');
         targ.animate([
             {offset: 0.5, backgroundColor: effectColor},
         ], {
-            duration: HOVER_DURATION
+            duration: durationMillisecond 
         });
         setTimeout(() => {
             targ.classList.remove('hovering');
-        }, HOVER_DURATION);
+        }, durationMillisecond);
     }
 }
-/*
-function rippleEvent(e) {
-    let RIPPlE_DURATION = 80;
-    let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
-    corner(startNum,'n');
-    corner(startNum,'e');
-    corner(startNum,'s');
-    corner(startNum,'w');
 
-    function corner(number,direction){
-        if (number >=0 && number < DIMENSION**2) {
-            hoverEffect(innerBoxArray[number]);
-        }
-        if (direction == 'n'){
-            straight(number,'nw');
-            straight(number,'ne');
-            if (number % DIMENSION != 0 && number >= 0){
-                setTimeout(() => {
-                    corner(number-DIMENSION-1,'n');
-                }, RIPPlE_DURATION);
-            }
-        }
-        else if (direction == 'e'){
-            straight(number,'ne');
-            straight(number,'se');
-            if ((number+1) % DIMENSION != 0 && number >= 0){
-                setTimeout(() => {
-                corner(number-DIMENSION+1,'e');
-                }, RIPPlE_DURATION);
-            }
-        }
-        else if (direction == 's'){
-            straight(number,'se');
-            straight(number,'sw');
-            if ((number+1) % DIMENSION != 0 && number < DIMENSION**2){
-                setTimeout(() => {
-                corner(number+DIMENSION+1,'s');
-                }, RIPPlE_DURATION);
-            }
-        }
-        else if (direction == 'w'){
-            straight(number,'nw');
-            straight(number,'sw');
-            if (number % DIMENSION != 0 && number < DIMENSION**2){
-                setTimeout(() => {
-                    corner(number+DIMENSION-1,'w');
-                }, RIPPlE_DURATION);
-            }
-        }
-   }
-
-    function straight(number,direction){
-        if (number >= 0 && number < DIMENSION**2){
-            hoverEffect(innerBoxArray[number]);
-        }
-        if (direction == 'nw' && number % DIMENSION !=0 && number-1 >=0) {
-            setTimeout(() => {
-                straight(number-1,'nw');
-            }, RIPPlE_DURATION);
-        }
-        else if (direction == 'ne' && number >=0) {
-            setTimeout(() => {
-                straight(number-DIMENSION,'ne');
-            }, RIPPlE_DURATION);
-        }
-        else if (direction == 'sw' && number < DIMENSION**2) {
-            setTimeout(() => {
-                straight(number+DIMENSION,'sw');
-            }, RIPPlE_DURATION);
-        }
-        else if (direction == 'se' && (number+1) % DIMENSION !=0) {
-            setTimeout(() => {
-                straight(number+1,'se');
-            }, RIPPlE_DURATION);
-        }
-   }
-}
-*/
 function fillColorEffect(targ,color) {
     if (color == 'black') {
         targ.style.backgroundColor = "black";
@@ -193,6 +115,7 @@ function rippleEvent(e) {
     let cornerArray = [startNum,startNum,startNum,startNum];
     let validCorners = 4;
     let validCornerArray = [1,1,1,1];
+    let rippleDelayMillisecond = 0
 
     while (validCorners > 0) {
         for (let i = 0; i < 4; i++) {
@@ -232,7 +155,7 @@ function rippleEvent(e) {
             if (validCornerArray[i] == 1){
                 console.log(validCornerArray[i])
                 console.log(cornerArray[i])
-                hoverEffect(innerBoxArray[cornerArray[i]])
+                hoverEffect(innerBoxArray[cornerArray[i]], 150)
             }
         }
     }
