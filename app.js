@@ -54,20 +54,98 @@ function fillColorEvent(e) {
     }
 }
 
-function hoverEffect(targ,durationMillisecond, startDelay = 0) {
+function hoverEffect(targ, durationMillisecond = 150) {
     if (!targ.classList.contains('hovering')) {
+        targ.classList.add('hovering');
+        targ.animate([
+            {offset: 0.5, backgroundColor: effectColor},
+        ], {
+            duration: durationMillisecond 
+        });
         setTimeout(() => {
-            targ.classList.add('hovering');
-            targ.animate([
-                {offset: 0.5, backgroundColor: effectColor},
-            ], {
-                duration: durationMillisecond 
-            });
-            setTimeout(() => {
-                targ.classList.remove('hovering');
-            }, durationMillisecond);
-        }, startDelay);
+            targ.classList.remove('hovering');
+        }, durationMillisecond);
     }
+}
+
+function rippleEvent(e) {
+    var startTime = performance.now()
+    let RIPPlE_DURATION = 80;
+    let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
+    corner(startNum,'n');
+    corner(startNum,'e');
+    corner(startNum,'s');
+    corner(startNum,'w');
+
+    function corner(number,direction){
+        if (number >=0 && number < DIMENSION**2) {
+            hoverEffect(innerBoxArray[number]);
+        }
+        if (direction == 'n'){
+            straight(number,'nw');
+            straight(number,'ne');
+            if (number % DIMENSION != 0 && number >= 0){
+                setTimeout(() => {
+                    corner(number-DIMENSION-1,'n');
+                }, RIPPlE_DURATION);
+            }
+        }
+        else if (direction == 'e'){
+            straight(number,'ne');
+            straight(number,'se');
+            if ((number+1) % DIMENSION != 0 && number >= 0){
+                setTimeout(() => {
+                corner(number-DIMENSION+1,'e');
+                }, RIPPlE_DURATION);
+            }
+        }
+        else if (direction == 's'){
+            straight(number,'se');
+            straight(number,'sw');
+            if ((number+1) % DIMENSION != 0 && number < DIMENSION**2){
+                setTimeout(() => {
+                corner(number+DIMENSION+1,'s');
+                }, RIPPlE_DURATION);
+            }
+        }
+        else if (direction == 'w'){
+            straight(number,'nw');
+            straight(number,'sw');
+            if (number % DIMENSION != 0 && number < DIMENSION**2){
+                setTimeout(() => {
+                    corner(number+DIMENSION-1,'w');
+                }, RIPPlE_DURATION);
+            }
+        }
+   }
+
+    function straight(number,direction){
+        if (number >= 0 && number < DIMENSION**2){
+            hoverEffect(innerBoxArray[number]);
+        }
+        if (direction == 'nw' && number % DIMENSION !=0 && number-1 >=0) {
+            setTimeout(() => {
+                straight(number-1,'nw');
+            }, RIPPlE_DURATION);
+        }
+        else if (direction == 'ne' && number >=0) {
+            setTimeout(() => {
+                straight(number-DIMENSION,'ne');
+            }, RIPPlE_DURATION);
+        }
+        else if (direction == 'sw' && number < DIMENSION**2) {
+            setTimeout(() => {
+                straight(number+DIMENSION,'sw');
+            }, RIPPlE_DURATION);
+        }
+        else if (direction == 'se' && (number+1) % DIMENSION !=0) {
+            setTimeout(() => {
+                straight(number+1,'se');
+            }, RIPPlE_DURATION);
+        }
+   }
+    var endTime = performance.now()
+    console.log(endTime - startTime)
 }
 
 function fillColorEffect(targ,color) {
@@ -110,82 +188,4 @@ function eraseGrid() {
     }
 }
 
-function rippleEvent(e) {
-    rippleEffect(e,80,150)
-}
-
-function rippleEffect(e,incrementnMilliseconds,durationMillisecond){
-    var startTime = performance.now()
-    let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
-    // tl, tr, bl, br
-    let cornerArray = [startNum,startNum,startNum,startNum];
-    let validCorners = 4;
-    let validCornerArray = [1,1,1,1];
-    let rippleDelayMillisecond = 0
-    let sideNumber = 0
-    let sideArray = []
-
-    while (validCorners > 0) {
-        for (let i = 0; i < 4; i++) {
-            if (validCornerArray[i] == 1) {
-                if (i == 0){
-                    cornerArray[i] -= DIMENSION+1
-                    if ((cornerArray[i]+1) % DIMENSION == 0 || cornerArray[i] < 0){
-                        validCornerArray[i] = 0
-                        validCorners -= 1
-                    }            
-                }
-                else if (i == 1){
-                    cornerArray[i] -= DIMENSION-1
-                    if (cornerArray[i] % DIMENSION == 0 || cornerArray[i] < 0){
-                        validCornerArray[i] = 0
-                        validCorners -= 1
-                    }
-                }
-                else if (i == 2){
-                    cornerArray[i] += DIMENSION-1
-                    if ((cornerArray[i]+1) % DIMENSION == 0 || cornerArray[i] >= DIMENSION**2){
-                        validCornerArray[i] = 0
-                        validCorners -= 1
-                    }
-                }
-                else if (i == 3){
-                    cornerArray[i] += DIMENSION+1
-                    if (cornerArray[i] % DIMENSION == 0 || cornerArray[i] >= DIMENSION**2){
-                        validCornerArray[i] = 0
-                        validCorners -= 1
-                    }
-                }
-            }
-        }
-        // Determine side array
-        // Top
-        if (validCornerArray[0]){
-            sideNumber = cornerArray[0] + 1
-            while (sideNumber < cornerArray[1] && sideNumber % DIMENSION != 0) {
-                sideArray.push(sideNumber)
-                sideNumber += 1
-            }
-        }
-        // Left
-        // Right
-        // Bottom
-
-
-
-
-        for (let i = 0; i < 4; i++) {
-            if (validCornerArray[i]){
-                hoverEffect(innerBoxArray[cornerArray[i]], durationMillisecond, rippleDelayMillisecond)
-            }
-        }
-        for (let i = 0; i < sideArray.length; i++) {
-            hoverEffect(innerBoxArray[sideArray[i]], durationMillisecond, rippleDelayMillisecond)
-        }
-        sideArray = []
-        rippleDelayMillisecond += incrementnMilliseconds
-    }
-    var endTime = performance.now()
-    console.log(endTime-startTime)
-}
 
