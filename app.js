@@ -68,18 +68,29 @@ function hoverEffect(targ, durationMillisecond = 150) {
     }
 }
 
-function rippleEvent(e) {
+function rippleEvent(e, RIPPlE_DURATION = 80) {
     var startTime = performance.now()
-    let RIPPlE_DURATION = 80;
     let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
     corner(startNum,'n');
     corner(startNum,'e');
     corner(startNum,'s');
     corner(startNum,'w');
 
+    function animate(targ) {
+        if (!targ.classList.contains('rippling')){
+            targ.classList.add('rippling');
+            let color = targ.style.backgroundColor;
+            targ.style.backgroundColor = 'white';
+            setTimeout(() => {
+                targ.style.backgroundColor = color;
+                targ.classList.remove('rippling');
+            }, RIPPlE_DURATION);
+        }
+    }
+
     function corner(number,direction){
         if (number >=0 && number < DIMENSION**2) {
-            hoverEffect(innerBoxArray[number]);
+            animate(innerBoxArray[number]);
         }
         if (direction == 'n'){
             straight(number,'nw');
@@ -121,7 +132,7 @@ function rippleEvent(e) {
 
     function straight(number,direction){
         if (number >= 0 && number < DIMENSION**2){
-            hoverEffect(innerBoxArray[number]);
+            animate(innerBoxArray[number]);
         }
         if (direction == 'nw' && number % DIMENSION !=0 && number-1 >=0) {
             setTimeout(() => {
@@ -180,6 +191,12 @@ function eraseGrid() {
     for (let i = 0; i < DIMENSION**2; i++) {
         eraseDelayMillisecond += 1000/(DIMENSION**2) 
         setTimeout(() => {
+            if (innerBoxArray[i].classList.contains('white')){
+                innerBoxArray[i].classList.remove('white')
+            }
+            if (innerBoxArray[i].classList.contains('black')){
+                innerBoxArray[i].classList.remove('black')
+            }
             innerBoxArray[i].style.backgroundColor = 'transparent';
             if (innerBoxArray[i].classList.contains('animate')){
                 innerBoxArray[i].classList.remove('animate')

@@ -44,6 +44,7 @@ body {
 
 .animate {
     animation: changecolor 10s infinite;
+    overflow: hidden;
 }
 
 @keyframes changecolor {
@@ -61,8 +62,3 @@ body {
 .black {
     background-color: black;
 }
-.white {
-    background-color: white;
-}
-
-
