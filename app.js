@@ -1,7 +1,7 @@
 const grid = document.querySelector('.grid');
 const button = document.querySelector('#bttn__updategrid');
-const GRIDWIDTH = 960;
-const DIMENSION = 10;
+const GRIDWIDTH = 700;
+const DIMENSION = 25;
 const BOXWIDTH = (100/DIMENSION).toString() + "%";
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
 let brushColor = 'random'
@@ -70,6 +70,7 @@ function hoverEffect(targ) {
 }
 
 function rippleEvent(e) {
+    var startTime = performance.now()
     let RIPPlE_DURATION = 80;
     let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
     corner(startNum,'n');
@@ -144,6 +145,8 @@ function rippleEvent(e) {
             }, RIPPlE_DURATION);
         }
    }
+    var endTime = performance.now()
+    console.log(endTime - startTime)
 }
 
 function fillColorEffect(targ,color) {
@@ -169,7 +172,6 @@ function eraseGrid() {
     for (let i = 0; i < DIMENSION**2; i++) {
         eraseDelayMillisecond += 10 
         setTimeout(() => {
-            console.log(eraseDelayMillisecond)
             innerBoxArray[i].style.backgroundColor = 'transparent';
             if (innerBoxArray[i].classList.contains('animate')){
                 innerBoxArray[i].classList.remove('animate')
@@ -177,3 +179,5 @@ function eraseGrid() {
         }, eraseDelayMillisecond);
     }
 }
+
+
