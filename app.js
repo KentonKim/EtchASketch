@@ -12,6 +12,7 @@ grid.style.width = (GRIDWIDTH).toString() + 'px';
 grid.style.height = (GRIDWIDTH).toString() + 'px';
 grid.style.gridTemplateColumns = `repeat(${DIMENSION}, 1fr)`;
 grid.style.gridTemplateRows = `repeat(${DIMENSION}, 1fr)`;
+button.addEventListener('click', eraseGrid)
 
 document.body.onmousedown = function() { 
   mouseDown = 1;
@@ -28,11 +29,12 @@ for (let i = 0; i < DIMENSION**2; i++) {
     box.classList.add('box');
 
     let innerbox = document.createElement('div');
-    innerbox.classList.add('innerbox');
-    innerbox.addEventListener('click', rippleEvent);
-    innerbox.addEventListener('mousedown', fillColorEvent);
-    innerbox.addEventListener('mouseenter', hoverEvent);
-    innerbox.addEventListener('mouseenter', fillColorEvent);
+    innerbox.classList.add('innerbox', 'hidden');
+    innerbox.style.backgroundColor = 'white';
+    box.addEventListener('click', rippleEvent);
+    box.addEventListener('mousedown', fillColorEvent);
+    box.addEventListener('mouseenter', hoverEvent);
+    box.addEventListener('mouseenter', fillColorEvent);
   
     box.appendChild(innerbox);
     grid.appendChild(box);
@@ -48,6 +50,7 @@ function hoverEvent(e) {
 function fillColorEvent(e) {
     if (e.type == "mousedown") {
         fillColorEffect(e.target,brushColor);
+        console.log(e.target)
     }
     else if (e.type == "mouseenter" && mouseDown) {
         fillColorEffect(e.target,brushColor);
@@ -69,21 +72,17 @@ function hoverEffect(targ, durationMillisecond = 150) {
 }
 
 function rippleEvent(e, RIPPlE_DURATION = 80) {
-    var startTime = performance.now()
-    let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
+    let startNum = Array.prototype.indexOf.call(BoxArray, e.target);
     corner(startNum,'n');
     corner(startNum,'e');
     corner(startNum,'s');
     corner(startNum,'w');
 
     function animate(targ) {
-        if (!targ.classList.contains('rippling')){
-            targ.classList.add('rippling');
-            let color = targ.style.backgroundColor;
-            targ.style.backgroundColor = 'white';
+        if (targ.classList.contains('hidden')){
+            targ.classList.remove('hidden');
             setTimeout(() => {
-                targ.style.backgroundColor = color;
-                targ.classList.remove('rippling');
+                targ.classList.add('hidden');
             }, RIPPlE_DURATION);
         }
     }
@@ -155,8 +154,6 @@ function rippleEvent(e, RIPPlE_DURATION = 80) {
             }, RIPPlE_DURATION);
         }
    }
-    var endTime = performance.now()
-    console.log(endTime - startTime)
 }
 
 function fillColorEffect(targ,color) {
@@ -180,26 +177,24 @@ function fillColorEffect(targ,color) {
         else {
             targ.classList.add('animate');
         }
-
     }
 }
 
-button.addEventListener('click',eraseGrid)
 
 function eraseGrid() {
     let eraseDelayMillisecond = 0
     for (let i = 0; i < DIMENSION**2; i++) {
         eraseDelayMillisecond += 1000/(DIMENSION**2) 
         setTimeout(() => {
-            if (innerBoxArray[i].classList.contains('white')){
-                innerBoxArray[i].classList.remove('white')
+            if (BoxArray[i].classList.contains('white')){
+                BoxArray[i].classList.remove('white')
             }
-            if (innerBoxArray[i].classList.contains('black')){
-                innerBoxArray[i].classList.remove('black')
+            if (BoxArray[i].classList.contains('black')){
+                BoxArray[i].classList.remove('black')
             }
-            innerBoxArray[i].style.backgroundColor = 'transparent';
-            if (innerBoxArray[i].classList.contains('animate')){
-                innerBoxArray[i].classList.remove('animate')
+            BoxArray[i].style.backgroundColor = 'transparent';
+            if (BoxArray[i].classList.contains('animate')){
+                BoxArray[i].classList.remove('animate')
             }
         }, eraseDelayMillisecond);
     }
