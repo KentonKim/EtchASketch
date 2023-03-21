@@ -1,7 +1,7 @@
 const grid = document.querySelector('.grid');
 const button = document.querySelector('#bttn__updategrid');
 const GRIDWIDTH = 700;
-const DIMENSION = 30;
+const DIMENSION = 25;
 const BOXWIDTH = (100/DIMENSION).toString() + "%";
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
 let brushColor = 'random'
@@ -115,6 +115,7 @@ function rippleEvent(e) {
 }
 
 function rippleEffect(e,incrementnMilliseconds,durationMillisecond){
+    var startTime = performance.now()
     let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
     // tl, tr, bl, br
     let cornerArray = [startNum,startNum,startNum,startNum];
@@ -184,5 +185,7 @@ function rippleEffect(e,incrementnMilliseconds,durationMillisecond){
         sideArray = []
         rippleDelayMillisecond += incrementnMilliseconds
     }
+    var endTime = performance.now()
+    console.log(endTime-startTime)
 }
 
