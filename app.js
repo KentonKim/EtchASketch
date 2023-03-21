@@ -1,7 +1,7 @@
 const grid = document.querySelector('.grid');
 const button = document.querySelector('#bttn__updategrid');
 const GRIDWIDTH = 700;
-const DIMENSION = 10;
+const DIMENSION = 30;
 const BOXWIDTH = (100/DIMENSION).toString() + "%";
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
 let brushColor = 'random'
@@ -54,17 +54,19 @@ function fillColorEvent(e) {
     }
 }
 
-function hoverEffect(targ,durationMillisecond) {
+function hoverEffect(targ,durationMillisecond, startDelay = 0) {
     if (!targ.classList.contains('hovering')) {
-        targ.classList.add('hovering');
-        targ.animate([
-            {offset: 0.5, backgroundColor: effectColor},
-        ], {
-            duration: durationMillisecond 
-        });
         setTimeout(() => {
-            targ.classList.remove('hovering');
-        }, durationMillisecond);
+            targ.classList.add('hovering');
+            targ.animate([
+                {offset: 0.5, backgroundColor: effectColor},
+            ], {
+                duration: durationMillisecond 
+            });
+            setTimeout(() => {
+                targ.classList.remove('hovering');
+            }, durationMillisecond);
+        }, startDelay);
     }
 }
 
@@ -109,13 +111,18 @@ function eraseGrid() {
 }
 
 function rippleEvent(e) {
-    let RIPPlE_DURATION = 80;
+    rippleEffect(e,80,150)
+}
+
+function rippleEffect(e,incrementnMilliseconds,durationMillisecond){
     let startNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
     // tl, tr, bl, br
     let cornerArray = [startNum,startNum,startNum,startNum];
     let validCorners = 4;
     let validCornerArray = [1,1,1,1];
     let rippleDelayMillisecond = 0
+    let sideNumber = 0
+    let sideArray = []
 
     while (validCorners > 0) {
         for (let i = 0; i < 4; i++) {
@@ -150,14 +157,32 @@ function rippleEvent(e) {
                 }
             }
         }
-        // 
-        for (let i = 0; i < 5; i++) {
-            if (validCornerArray[i] == 1){
-                console.log(validCornerArray[i])
-                console.log(cornerArray[i])
-                hoverEffect(innerBoxArray[cornerArray[i]], 150)
+        // Determine side array
+        // Top
+        if (validCornerArray[0]){
+            sideNumber = cornerArray[0] + 1
+            while (sideNumber < cornerArray[1] && sideNumber % DIMENSION != 0) {
+                sideArray.push(sideNumber)
+                sideNumber += 1
             }
         }
+        // Left
+        // Right
+        // Bottom
+
+
+
+
+        for (let i = 0; i < 4; i++) {
+            if (validCornerArray[i]){
+                hoverEffect(innerBoxArray[cornerArray[i]], durationMillisecond, rippleDelayMillisecond)
+            }
+        }
+        for (let i = 0; i < sideArray.length; i++) {
+            hoverEffect(innerBoxArray[sideArray[i]], durationMillisecond, rippleDelayMillisecond)
+        }
+        sideArray = []
+        rippleDelayMillisecond += incrementnMilliseconds
     }
 }
 
