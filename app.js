@@ -1,10 +1,10 @@
 const grid = document.querySelector('.grid');
 const button = document.querySelector('#bttn__updategrid');
-const GRIDWIDTH = 700;
-const DIMENSION = 25;
+const GRIDWIDTH = 800;
+const DIMENSION = 30;
 const BOXWIDTH = (100/DIMENSION).toString() + "%";
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
-let brushColor = 'random'
+let brushColor = 'black'
 let effectColor = 'white'
 let mouseDown = 0;
 
@@ -48,12 +48,15 @@ function hoverEvent(e) {
 }
 
 function fillColorEvent(e) {
+    let startBox = Array.prototype.indexOf.call(BoxArray, e.target);
+    if (startBox == -1) {
+        startBox = Array.prototype.indexOf.call(innerBoxArray, e.target);
+    }
     if (e.type == "mousedown") {
-        fillColorEffect(e.target,brushColor);
-        console.log(e.target)
+        fillColorEffect(BoxArray[startBox],brushColor);
     }
     else if (e.type == "mouseenter" && mouseDown) {
-        fillColorEffect(e.target,brushColor);
+        fillColorEffect(BoxArray[startBox],brushColor);
     }
 }
 
@@ -72,11 +75,14 @@ function hoverEffect(targ, durationMillisecond = 150) {
 }
 
 function rippleEvent(e, RIPPlE_DURATION = 80) {
-    let startNum = Array.prototype.indexOf.call(BoxArray, e.target);
-    corner(startNum,'n');
-    corner(startNum,'e');
-    corner(startNum,'s');
-    corner(startNum,'w');
+    let startBox = Array.prototype.indexOf.call(BoxArray, e.target);
+    if (startBox == -1) {
+        startBox = Array.prototype.indexOf.call(innerBoxArray, e.target);
+    }
+    corner(startBox,'n');
+    corner(startBox,'e');
+    corner(startBox,'s');
+    corner(startBox,'w');
 
     function animate(targ) {
         if (targ.classList.contains('hidden')){
