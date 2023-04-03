@@ -1,18 +1,15 @@
 const grid = document.querySelector('.grid');
-const button = document.querySelector('#bttn__updategrid');
-const GRIDWIDTH = 800;
-const DIMENSION = 30;
+const buttonErase = document.querySelector('#bttn__updategrid');
+let DIMENSION = document.querySelector('#size__input').value;
 const BOXWIDTH = (100/DIMENSION).toString() + "%";
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
-let brushColor = 'black'
+let brushColor = 'random'
 let effectColor = 'white'
 let mouseDown = 0;
 
-grid.style.width = (GRIDWIDTH).toString() + 'px';
-grid.style.height = (GRIDWIDTH).toString() + 'px';
 grid.style.gridTemplateColumns = `repeat(${DIMENSION}, 1fr)`;
 grid.style.gridTemplateRows = `repeat(${DIMENSION}, 1fr)`;
-button.addEventListener('click', eraseGrid)
+buttonErase.addEventListener('click', eraseGrid)
 
 document.body.onmousedown = function() { 
   mouseDown = 1;
@@ -35,6 +32,8 @@ for (let i = 0; i < DIMENSION**2; i++) {
     box.addEventListener('mousedown', fillColorEvent);
     box.addEventListener('mouseenter', hoverEvent);
     box.addEventListener('mouseenter', fillColorEvent);
+    box.innerHTML = i.toString()
+    innerbox.innerHTML = i.toString()
   
     box.appendChild(innerbox);
     grid.appendChild(box);
@@ -79,8 +78,8 @@ function rippleEvent(e, RIPPlE_DURATION = 80) {
     if (startBox == -1) {
         startBox = Array.prototype.indexOf.call(innerBoxArray, e.target);
     }
-    corner(startBox,'n');
-    corner(startBox,'e');
+    //corner(startBox,'n');
+    //corner(startBox,'e');
     corner(startBox,'s');
     corner(startBox,'w');
 
@@ -133,7 +132,7 @@ function rippleEvent(e, RIPPlE_DURATION = 80) {
                 }, RIPPlE_DURATION);
             }
         }
-   }
+    }
 
     function straight(number,direction){
         if (number >= 0 && number < DIMENSION**2){
