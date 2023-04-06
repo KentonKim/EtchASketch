@@ -4,7 +4,7 @@ const buttonSize = document.querySelector('#size__bttn');
 const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
 let dimension = parseInt(document.querySelector('#size__input').value);
 let oldDimension = 0
-let brushColor = 'random'
+let brushColor = 'changing'
 let effectColor = 'white'
 let mouseDown = 0;
 let BoxArray = [];
@@ -28,6 +28,9 @@ function initializeGrid() {
     let delayMilliseccond = clearGrid()
     setTimeout(() => {
         dimension = parseInt(document.querySelector('#size__input').value);
+        if (dimension == oldDimension) {
+            return
+        }
         grid.style.gridTemplateColumns = `repeat(${dimension}, 1fr)`;
         grid.style.gridTemplateRows = `repeat(${dimension}, 1fr)`;
 
@@ -42,7 +45,6 @@ function initializeGrid() {
 
                 let innerbox = document.createElement('div');
                 innerbox.classList.add('innerbox', 'hidden');
-                innerbox.style.backgroundColor = 'white';
 
                 BoxArray.push(box)
                 innerBoxArray.push(innerbox)
@@ -70,6 +72,8 @@ function initializeGrid() {
         ], {
             duration: 800
         })
+
+        let gridArray = playSnake()
     }, delayMilliseccond);
 }
 
@@ -79,16 +83,7 @@ function clearGrid() {
     for (let i = 0; i < sidelength**2; i++) {
         eraseDelayMillisecond += 1000/(BoxArray.length) 
         setTimeout(() => {
-            if (BoxArray[i].classList.contains('white')){
-                BoxArray[i].classList.remove('white')
-            }
-            if (BoxArray[i].classList.contains('black')){
-                BoxArray[i].classList.remove('black')
-            }
-            if (BoxArray[i].classList.contains('animate')){
-                BoxArray[i].classList.remove('animate')
-            }
-            BoxArray[i].style.backgroundColor = 'gray';
+            BoxArray[i].replace('box')
         }, eraseDelayMillisecond);
     }
     return eraseDelayMillisecond
@@ -216,37 +211,60 @@ function animate(targ, RIPPlE_DURATION = 80) {
 }
 
 function fillColorEffect(targ,color) {
-    if (color == 'black') {
-        targ.style.backgroundColor = "black";
-    }
-    else if (color == 'white') {
-        targ.style.backgroundColor = "white";
-    }
-    else if (color == 'random') {
-        /*
-        let randomColor = Math.floor(Math.random() * 7);
-        targ.style.backgroundColor = colorArray[randomColor];
-        */
-        if (targ.classList.contains('animate')) {
-            targ.style.animation = "none"
-            setTimeout(() => {
-                targ.style.animation = ""
-            }, 10);
+    if (targ.classList.contains('box')){
+        if (color == 'black') {
+            targ.classList.replace('box','black');
         }
-        else {
-            targ.classList.add('animate');
+        else if (color == 'white') {
+            targ.classList.replace('box','black');
+        }
+        else if (color == 'random') {
+            /*
+            let randomColor = Math.floor(Math.random() * 7);
+            targ.style.backgroundColor = colorArray[randomColor];
+            */
+        }
+        else if (color == 'changing') {
+            targ.classList.replace('box','animate');
         }
     }
 }
 
 function playSnake() {
+    // Initialize variables (0,1,2,3 = Top, right, bottom, left)
+    let facing = 1
+    let gridArray = Array(dimension).fill().map(() => Array(dimension).fill(0));
+    let headCoordinate = [Math.floor(dimension/2), Math.floor(dimension/4)]
+    let fruitCoordinate = [Math.floor(dimension/2), Math.floor(3*dimension/4)]
+    const originalBorderRadius = BoxArray[0].style.borderRadius
+    innerBoxArray[dimension*headCoordinate[0]+headCoordinate[1]].classList.add('snake')
+    innerBoxArray[dimension*fruitCoordinate[0]+fruitCoordinate[1]].style.borderRadius = "100%"
+    innerBoxArray[dimension*fruitCoordinate[0]+fruitCoordinate[1]].classList.remove('hidden')
+    innerBoxArray[dimension*fruitCoordinate[0]+fruitCoordinate[1]].classList.add('fruit')
     // Idle start animation
 
     // Event listener when keystroke is wasd
+    document.addEventListener('keydown', movement)
 
     // Controls
+    function movement(e) {
+
+    }
 
     // Random meal generation
+    function generateApple() {
+
+    }
 
     // Eating 
+    function eatApple() {
+
+
+    // Tick movements
+
+
+    // Lose Condition
+
+    }
+    return gridArray
 }
