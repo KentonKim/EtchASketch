@@ -10,7 +10,7 @@ let mouseDown = 0;
 let BoxArray = [];
 let innerBoxArray = [];
 
-buttonErase.addEventListener('click', eraseGrid)
+buttonErase.addEventListener('click', clearGrid)
 buttonSize.addEventListener('click', initializeGrid)
 initializeGrid();
 
@@ -25,7 +25,7 @@ document.body.onmouseup = function() {
 }
 
 function initializeGrid() {
-    let delayMilliseccond = eraseGrid()
+    let delayMilliseccond = clearGrid()
     setTimeout(() => {
         dimension = parseInt(document.querySelector('#size__input').value);
         grid.style.gridTemplateColumns = `repeat(${dimension}, 1fr)`;
@@ -58,27 +58,62 @@ function initializeGrid() {
             }
         }
             oldDimension = dimension
-            
+        let borderRadiusPixelNumber = (grid.offsetWidth/dimension)*0.1
+
+        for (let j = 0; j < dimension**2; j++) {
+            BoxArray[j].style.borderRadius = borderRadiusPixelNumber + "px";
+            innerBoxArray[j].style.borderRadius = borderRadiusPixelNumber + "px";
+        }
+
+        grid.animate([
+            {offset: 0.5, backgroundColor:"white"},
+        ], {
+            duration: 800
+        })
     }, delayMilliseccond);
 }
 
+function clearGrid() {
+    let eraseDelayMillisecond = 0
+    let sidelength = BoxArray.length**0.5
+    for (let i = 0; i < sidelength**2; i++) {
+        eraseDelayMillisecond += 1000/(BoxArray.length) 
+        setTimeout(() => {
+            if (BoxArray[i].classList.contains('white')){
+                BoxArray[i].classList.remove('white')
+            }
+            if (BoxArray[i].classList.contains('black')){
+                BoxArray[i].classList.remove('black')
+            }
+            if (BoxArray[i].classList.contains('animate')){
+                BoxArray[i].classList.remove('animate')
+            }
+            BoxArray[i].style.backgroundColor = 'gray';
+        }, eraseDelayMillisecond);
+    }
+    return eraseDelayMillisecond
+}
 
-
-function hoverEvent(e) {
-    hoverEffect(e.target,150);
+function getCellNumber(e) {
+    let cellNum = Array.prototype.indexOf.call(BoxArray, e.target);
+    if (cellNum == -1) {
+        cellNum = Array.prototype.indexOf.call(innerBoxArray, e.target);
+    }
+    return cellNum
 }
 
 function fillColorEvent(e) {
-    let startBox = Array.prototype.indexOf.call(BoxArray, e.target);
-    if (startBox == -1) {
-        startBox = Array.prototype.indexOf.call(innerBoxArray, e.target);
-    }
+    const startBox = getCellNumber(e)
     if (e.type == "mousedown") {
         fillColorEffect(BoxArray[startBox],brushColor);
     }
     else if (e.type == "mouseenter" && mouseDown) {
         fillColorEffect(BoxArray[startBox],brushColor);
     }
+}
+
+function hoverEvent(e) {
+    hoverEffect(e.target,150);
 }
 
 function hoverEffect(targ, durationMillisecond = 150) {
@@ -96,23 +131,11 @@ function hoverEffect(targ, durationMillisecond = 150) {
 }
 
 function rippleEvent(e, RIPPlE_DURATION = 80) {
-    let startBox = Array.prototype.indexOf.call(BoxArray, e.target);
-    if (startBox == -1) {
-        startBox = Array.prototype.indexOf.call(innerBoxArray, e.target);
-    }
+    const startBox = getCellNumber(e)
     corner(startBox,'n');
     corner(startBox,'e');
     corner(startBox,'s');
     corner(startBox,'w');
-
-    function animate(targ) {
-        if (targ.classList.contains('hidden')){
-            targ.classList.remove('hidden');
-            setTimeout(() => {
-                targ.classList.add('hidden');
-            }, RIPPlE_DURATION);
-        }
-    }
 
     function corner(number,direction){
         if (number >=0 && number < dimension**2) {
@@ -155,32 +178,41 @@ function rippleEvent(e, RIPPlE_DURATION = 80) {
             }
         }
     }
+}
 
-    function straight(number,direction){
-        if (number >= 0 && number < dimension**2){
-            animate(innerBoxArray[number]);
-        }
-        if (direction == 'nw' && number % dimension !=0 && number-1 >=0) {
-            setTimeout(() => {
-                straight(number-1,'nw');
-            }, RIPPlE_DURATION);
-        }
-        else if (direction == 'ne' && number >=0) {
-            setTimeout(() => {
-                straight(number-dimension,'ne');
-            }, RIPPlE_DURATION);
-        }
-        else if (direction == 'sw' && number < dimension**2) {
-            setTimeout(() => {
-                straight(number+dimension,'sw');
-            }, RIPPlE_DURATION);
-        }
-        else if (direction == 'se' && (number+1) % dimension !=0) {
-            setTimeout(() => {
-                straight(number+1,'se');
-            }, RIPPlE_DURATION);
-        }
-   }
+function straight(number,direction, RIPPlE_DURATION=80){
+    if (number >= 0 && number < dimension**2){
+        animate(innerBoxArray[number]);
+    }
+    if (direction == 'nw' && number % dimension !=0 && number-1 >=0) {
+        setTimeout(() => {
+            straight(number-1,'nw');
+        }, RIPPlE_DURATION);
+    }
+    else if (direction == 'ne' && number >=0) {
+        setTimeout(() => {
+            straight(number-dimension,'ne');
+        }, RIPPlE_DURATION);
+    }
+    else if (direction == 'sw' && number < dimension**2) {
+        setTimeout(() => {
+            straight(number+dimension,'sw');
+        }, RIPPlE_DURATION);
+    }
+    else if (direction == 'se' && (number+1) % dimension !=0) {
+        setTimeout(() => {
+            straight(number+1,'se');
+        }, RIPPlE_DURATION);
+    }
+}
+
+function animate(targ, RIPPlE_DURATION = 80) {
+    if (targ.classList.contains('hidden')){
+        targ.classList.remove('hidden');
+        setTimeout(() => {
+            targ.classList.add('hidden');
+        }, RIPPlE_DURATION);
+    }
 }
 
 function fillColorEffect(targ,color) {
@@ -207,24 +239,14 @@ function fillColorEffect(targ,color) {
     }
 }
 
-function eraseGrid() {
-    let eraseDelayMillisecond = 0
-    for (let i = 0; i < BoxArray.length; i++) {
-        eraseDelayMillisecond += 1000/(dimension**2) 
-        setTimeout(() => {
-            if (BoxArray[i].classList.contains('white')){
-                BoxArray[i].classList.remove('white')
-            }
-            if (BoxArray[i].classList.contains('black')){
-                BoxArray[i].classList.remove('black')
-            }
-            BoxArray[i].style.backgroundColor = 'transparent';
-            if (BoxArray[i].classList.contains('animate')){
-                BoxArray[i].classList.remove('animate')
-            }
-        }, eraseDelayMillisecond);
-    }
-    return eraseDelayMillisecond
+function playSnake() {
+    // Idle start animation
+
+    // Event listener when keystroke is wasd
+
+    // Controls
+
+    // Random meal generation
+
+    // Eating 
 }
-
-

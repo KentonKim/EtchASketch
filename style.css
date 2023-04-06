@@ -29,27 +29,32 @@ body {
     transform: scale(1,0.5) rotate(45deg);
     */
 }
-/*
+
 .box {
+    /*
     box-sizing: border-box;
-    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    */
+    background-color: gray;
 }
-*/
+
 .innerbox {
     width: 100%;
     height: 100%;
     /*border: 1px solid lightblue;*/
-    /*border-radius: 5px;*/
     background-color: black;
     /*animation: changecolor 10s infinite;*/
 }
 
 .animate {
     animation: changecolor 10s infinite;
+    overflow: hidden;
+}
+
+.animatefast {
+    animation: changecolor 1s infinite;
     overflow: hidden;
 }
 
