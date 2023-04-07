@@ -25,7 +25,7 @@ document.body.onmouseup = function() {
 }
 
 function initializeGrid() {
-    let delayMilliseccond = clearGrid()
+    let delaymillisecond = clearGrid()
     setTimeout(() => {
         dimension = parseInt(document.querySelector('#size__input').value);
         if (dimension == oldDimension) {
@@ -44,7 +44,7 @@ function initializeGrid() {
                 box.addEventListener('mouseenter', fillColorEvent);
 
                 let innerbox = document.createElement('div');
-                innerbox.classList.add('innerbox', 'hidden');
+                innerbox.classList.add('innerbox'/*, 'hidden'*/);
 
                 BoxArray.push(box)
                 innerBoxArray.push(innerbox)
@@ -74,7 +74,7 @@ function initializeGrid() {
         })
 
         let gridArray = playSnake()
-    }, delayMilliseccond);
+    }, delaymillisecond);
 }
 
 function clearGrid() {
@@ -88,6 +88,9 @@ function clearGrid() {
     }
     return eraseDelayMillisecond
 }
+
+
+
 
 function getCellNumber(e) {
     let cellNum = Array.prototype.indexOf.call(BoxArray, e.target);
@@ -230,26 +233,203 @@ function fillColorEffect(targ,color) {
     }
 }
 
+// Direction fxnArray Functions
+    // Basic Directions
+function topLeftMove(number, fxnArray, delaymillisecond = 80) {
+    if (number >= 0 || (number+1) % dimension != 0) {
+        setTimeout(() => {
+            topLeftMove(number - dimension - 1, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function topMove(number, fxnArray, delaymillisecond = 80) {
+    if (number >= 0) {
+        setTimeout(() => {
+            topLeftMove(number - dimension, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function topRightMove(number, fxnArray, delaymillisecond = 80) {
+    if (number >= 0 || (number) % dimension != 0) {
+        setTimeout(() => {
+            topLeftMove(number - dimension + 1, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function RightMove(number, fxnArray, delaymillisecond = 80) {
+    if ((number) % dimension != 0) {
+        setTimeout(() => {
+            topLeftMove(number + 1, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function botRightMove(number, fxnArray, delaymillisecond = 80) {
+    if (number >= dimension**2 || (number) % dimension != 0) {
+        setTimeout(() => {
+            topLeftMove(number + dimension + 1, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function botMove(number, fxnArray, delaymillisecond = 80) {
+    if (number >= dimension**2) {
+        setTimeout(() => {
+            topLeftMove(number + dimension, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function botLeftMove(number, fxnArray, delaymillisecond = 80) {
+    if (number >= dimension**2 || (number+1) % dimension != 0) {
+        setTimeout(() => {
+            topLeftMove(number + dimension - 1, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+function leftMove(number, fxnArray, delaymillisecond = 80) {
+    if ((number+1) % dimension != 0) {
+        setTimeout(() => {
+            topLeftMove(number - 1, fxnArray, delaymillisecond)
+        }, delaymillisecond);
+    }
+    if (fxnArray.length > 1) {
+        fxnArray.pop()(number, fxnArray, delaymillisecond)
+    }
+    else {
+        fxnArray[0](number);
+    }
+}
+
+
+
 function playSnake() {
-    // Initialize variables (0,1,2,3 = Top, right, bottom, left)
-    let facing = 1
+    // Snake Class
+    class Snake {
+        constructor(x, y) {
+            this.segments = [{x: x, y: y}];
+            this.direction = 'right';
+            this.score = 0;
+        }
+      
+        move(key) {
+            let x = this.segments[0].x;
+            let y = this.segments[0].y;
+        
+            switch(key) {
+                case 'w':
+                    if (this.direction == 'up') {
+                        return
+                    }
+                    this.direction = 'up'
+                    y -= 1;
+                    break;
+                case 's':
+                    if (this.direction == 'down') {
+                        return
+                    }
+                    this.direction = 'down'
+                    y += 1;
+                    break;
+                case 'a':
+                    if (this.direction == 'left') {
+                        return
+                    }
+                    this.direction = 'left'
+                    x -= 1;
+                    break;
+                case 'd':
+                     if (this.direction == 'right') {
+                        return
+                    }
+                    this.direction = 'right'
+                    x += 1;
+                    break;
+            }
+      
+            this.segments.unshift({x: x, y: y});
+            let snakeEnd = this.segments.pop();
+
+            innerBoxArray[dimension*snakeEnd.y+snakeEnd.x].classList.remove('snake')
+            innerBoxArray[dimension*y+x].classList.add('snake')
+        }
+      
+        eat() {
+            this.score += 10;
+            let x = this.segments[0].x;
+            let y = this.segments[0].y;
+            this.segments.unshift({x: x, y: y});
+        }
+      
+        collidesWithItself() {
+            let head = this.segments[0];
+            for(let i = 1; i < this.segments.length; i++) {
+                if(head.x === this.segments[i].x && head.y === this.segments[i].y) {
+                return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+    // Initialize variables     
     let gridArray = Array(dimension).fill().map(() => Array(dimension).fill(0));
-    let headCoordinate = [Math.floor(dimension/2), Math.floor(dimension/4)]
-    let fruitCoordinate = [Math.floor(dimension/2), Math.floor(3*dimension/4)]
+    let headCoordinate = [Math.floor(dimension/4), Math.floor(dimension/2)]
+    let fruitCoordinate = [Math.floor(3*dimension/4), Math.floor(dimension/2)]
     const originalBorderRadius = BoxArray[0].style.borderRadius
-    innerBoxArray[dimension*headCoordinate[0]+headCoordinate[1]].classList.add('snake')
-    innerBoxArray[dimension*fruitCoordinate[0]+fruitCoordinate[1]].style.borderRadius = "100%"
-    innerBoxArray[dimension*fruitCoordinate[0]+fruitCoordinate[1]].classList.remove('hidden')
-    innerBoxArray[dimension*fruitCoordinate[0]+fruitCoordinate[1]].classList.add('fruit')
+    innerBoxArray[dimension*headCoordinate[1]+headCoordinate[0]].classList.add('snake')
+    innerBoxArray[dimension*headCoordinate[1]+headCoordinate[0]].classList.remove('hidden')
+    innerBoxArray[dimension*fruitCoordinate[1]+fruitCoordinate[0]].style.borderRadius = "100%"
+    innerBoxArray[dimension*fruitCoordinate[1]+fruitCoordinate[0]].classList.add('fruit')
+
+    let snake = new Snake(headCoordinate[0],headCoordinate[1])
     // Idle start animation
 
     // Event listener when keystroke is wasd
-    document.addEventListener('keydown', movement)
-
-    // Controls
-    function movement(e) {
-
+    function moveSnake(e) {
+        snake.move(e.key)
     }
+    document.addEventListener('keydown', moveSnake)
 
     // Random meal generation
     function generateApple() {

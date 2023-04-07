@@ -99,3 +99,7 @@ body {
     background-color: pink;
     border-radius: 100%;
 }
+
+.snake {
+    background-color: olive;
+}
