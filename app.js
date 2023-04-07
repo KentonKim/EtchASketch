@@ -346,42 +346,44 @@ function playSnake() {
     // Snake Class
     class Snake {
         constructor(x, y) {
-            this.segments = [{x: x, y: y}];
+            this.segments = new Array(4).fill({x: x, y: y});
             this.direction = 'right';
             this.score = 0;
         }
-      
-        move(key) {
+        move() {
             let x = this.segments[0].x;
             let y = this.segments[0].y;
         
-            switch(key) {
-                case 'w':
-                    if (this.direction == 'up') {
-                        return
-                    }
-                    this.direction = 'up'
+            switch(this.direction) {
+              case 'up':
+                y -= 1;
+                break;
+              case 'down':
+                y += 1;
+                break;
+              case 'left':
+                x -= 1;
+                break;
+              case 'right':
+                x += 1;
+                break;
+            }
+        }
+        move() {
+            let x = this.segments[0].x;
+            let y = this.segments[0].y;
+        
+            switch(this.direction) {
+                case 'up':
                     y -= 1;
                     break;
-                case 's':
-                    if (this.direction == 'down') {
-                        return
-                    }
-                    this.direction = 'down'
+                case 'down':
                     y += 1;
                     break;
-                case 'a':
-                    if (this.direction == 'left') {
-                        return
-                    }
-                    this.direction = 'left'
+                case 'left':
                     x -= 1;
                     break;
-                case 'd':
-                     if (this.direction == 'right') {
-                        return
-                    }
-                    this.direction = 'right'
+                case 'right':
                     x += 1;
                     break;
             }
@@ -391,8 +393,13 @@ function playSnake() {
 
             innerBoxArray[dimension*snakeEnd.y+snakeEnd.x].classList.remove('snake')
             innerBoxArray[dimension*y+x].classList.add('snake')
+            console.log(x,y)
         }
-      
+
+        turn(direction) {
+            this.direction = direction;
+        }
+        
         eat() {
             this.score += 10;
             let x = this.segments[0].x;
@@ -415,36 +422,67 @@ function playSnake() {
     // Initialize variables     
     let gridArray = Array(dimension).fill().map(() => Array(dimension).fill(0));
     let headCoordinate = [Math.floor(dimension/4), Math.floor(dimension/2)]
-    let fruitCoordinate = [Math.floor(3*dimension/4), Math.floor(dimension/2)]
-    const originalBorderRadius = BoxArray[0].style.borderRadius
+    let appleLocation = Math.floor(3*dimension/4) + (dimension * Math.floor(dimension/2))
+    const originalBorderRadius = innerBoxArray[0].style.borderRadius
     innerBoxArray[dimension*headCoordinate[1]+headCoordinate[0]].classList.add('snake')
-    innerBoxArray[dimension*headCoordinate[1]+headCoordinate[0]].classList.remove('hidden')
-    innerBoxArray[dimension*fruitCoordinate[1]+fruitCoordinate[0]].style.borderRadius = "100%"
-    innerBoxArray[dimension*fruitCoordinate[1]+fruitCoordinate[0]].classList.add('fruit')
 
     let snake = new Snake(headCoordinate[0],headCoordinate[1])
+    generateApple()
     // Idle start animation
 
     // Event listener when keystroke is wasd
-    function moveSnake(e) {
-        snake.move(e.key)
+    function changeDirectionSnake(e) {
+        let currentDirection = snake.direction
+        if ((currentDirection == 'up' && (e.key == "w" || e.key == 's')) || 
+            (currentDirection == 'down' && (e.key == 's' || e.key == 'w')) || 
+            (currentDirection == 'right' && (e.key == 'd' || e.key == 'a')) || 
+            (currentDirection == 'left' && (e.key == 'a' || e.key == 'd'))){
+            return
+        }
+        switch (e.key) {
+            case 'w':
+                snake.direction = 'up'
+                break
+            case 's':
+                snake.direction = 'down'
+                break
+            case 'a':
+                snake.direction = 'left'
+                break
+            case 'd':
+                snake.direction = 'right'
+                break
+        }
     }
-    document.addEventListener('keydown', moveSnake)
+
+    document.addEventListener('keydown', changeDirectionSnake)
 
     // Random meal generation
     function generateApple() {
-
+        innerBoxArray[appleLocation].classList.add('apple')
+        innerBoxArray[appleLocation].style.borderRadius = "100%"
+        appleLocation = Math.floor(Math.random()*dimension**2)
     }
 
     // Eating 
-    function eatApple() {
-
+    function checkEatApple() {
+        let x = snake.segments[0].x
+        let y = snake.segments[0].y
+        if (innerBoxArray[dimension*y+x].classList.contains('apple')) {
+            innerBoxArray[dimension*y+x].classList.remove('apple')
+            innerBoxArray[dimension*y+x].style.borderRadius = originalBorderRadius
+            snake.eat()
+            generateApple()
+        }
+    }
 
     // Tick movements
-
+    setInterval(() => {
+       checkEatApple() 
+       //snake.move() 
+    }, 100);
 
     // Lose Condition
 
-    }
     return gridArray
 }
