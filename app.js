@@ -1,7 +1,14 @@
-const grid = document.querySelector('.grid');
-const buttonErase = document.querySelector('#bttn__updategrid');
-const buttonSize = document.querySelector('#size__bttn');
-const colorArray = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
+const grid                  = document.querySelector('.grid');
+const buttonColor           = document.querySelector('#color__bttn');
+const buttonWhite           = document.querySelector('#white__bttn');
+const buttonRandom          = document.querySelector('#random__bttn');
+const buttonErase           = document.querySelector('#erase__bttn');
+const buttonClear           = document.querySelector('#clear__bttn');
+const buttonSize            = document.querySelector('#size__bttn');
+const colorArray            = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB144','#bae1ff', '#FF6663'];
+const buttonPaint           = document.querySelector('#paint__bttn') 
+const buttonMinesweeper     = document.querySelector('#minesweeper__bttn')
+const buttonSnake           = document.querySelector('#snake__bttn')
 let dimension = parseInt(document.querySelector('#size__input').value);
 let oldDimension = 0
 let brushColor = 'changing'
@@ -10,18 +17,23 @@ let mouseDown = 0;
 let BoxArray = [];
 let innerBoxArray = [];
 
-buttonErase.addEventListener('click', clearGrid)
-buttonSize.addEventListener('click', initializeGrid)
-initializeGrid();
+//buttonClear.addEventListener('click', clearGrid)
+buttonPaint.addEventListener('click', initializeGrid)
+//buttonSnake.addEventListener('click', playSnake)
+//buttonMinesweeper.addEventListener('click', playMinesweeper)
+playPaint();
 
-document.body.onmousedown = function() { 
-  mouseDown = 1;
-}
-document.body.onmouseleave= function() { 
-  mouseDown = 0;
-}
-document.body.onmouseup = function() {
-  mouseDown = 0;
+function playPaint() {
+    initializeGrid();
+    document.body.onmousedown = function() { 
+    mouseDown = 1;
+    }
+    document.body.onmouseleave= function() { 
+    mouseDown = 0;
+    }
+    document.body.onmouseup = function() {
+    mouseDown = 0;
+    }
 }
 
 function initializeGrid() {
@@ -44,7 +56,7 @@ function initializeGrid() {
                 box.addEventListener('mouseenter', fillColorEvent);
 
                 let innerbox = document.createElement('div');
-                innerbox.classList.add('innerbox'/*, 'hidden'*/);
+                innerbox.classList.add('innerbox', 'hidden');
 
                 BoxArray.push(box)
                 innerBoxArray.push(innerbox)
@@ -68,12 +80,11 @@ function initializeGrid() {
         }
 
         grid.animate([
-            {offset: 0.5, backgroundColor:"white"},
+            {offset: 0.5, backgroundColor:"#D6D6D7"},
         ], {
-            duration: 800
+            duration: 1500
         })
 
-        let gridArray = playSnake()
     }, delaymillisecond);
 }
 
@@ -83,14 +94,11 @@ function clearGrid() {
     for (let i = 0; i < sidelength**2; i++) {
         eraseDelayMillisecond += 1000/(BoxArray.length) 
         setTimeout(() => {
-            BoxArray[i].replace('box')
+            BoxArray[i].classList = ['box']
         }, eraseDelayMillisecond);
     }
     return eraseDelayMillisecond
 }
-
-
-
 
 function getCellNumber(e) {
     let cellNum = Array.prototype.indexOf.call(BoxArray, e.target);
@@ -118,7 +126,7 @@ function hoverEffect(targ, durationMillisecond = 150) {
     if (!targ.classList.contains('hovering')) {
         targ.classList.add('hovering');
         targ.animate([
-            {offset: 0.5, backgroundColor: effectColor},
+            {offset: 0.5, backgroundColor: "#D6D6D7"},
         ], {
             duration: durationMillisecond 
         });
@@ -215,11 +223,12 @@ function animate(targ, RIPPlE_DURATION = 80) {
 
 function fillColorEffect(targ,color) {
     if (targ.classList.contains('box')){
+        targ.classList = 'box';
         if (color == 'black') {
-            targ.classList.replace('box','black');
+            targ.classList += ' black';
         }
         else if (color == 'white') {
-            targ.classList.replace('box','black');
+            targ.classList += ' white';
         }
         else if (color == 'random') {
             /*
@@ -228,13 +237,12 @@ function fillColorEffect(targ,color) {
             */
         }
         else if (color == 'changing') {
-            targ.classList.replace('box','animate');
+            targ.classList += ' changing';
         }
     }
 }
 
 // Direction fxnArray Functions
-    // Basic Directions
 function topLeftMove(number, fxnArray, delaymillisecond = 80) {
     if (number >= 0 || (number+1) % dimension != 0) {
         setTimeout(() => {
@@ -340,9 +348,11 @@ function leftMove(number, fxnArray, delaymillisecond = 80) {
     }
 }
 
-
-
+// Snake Game
 function playSnake() {
+    for (let i = 0; i < dimension**2; i++) {
+        innerBoxArray[i].classList.remove('hidden')
+    }
     // Snake Class
     class Snake {
         constructor(x, y) {

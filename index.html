@@ -8,29 +8,31 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="left sidebar">
-        <div class="option" id="size__div">
-            <div>Grid Sizing</div>
-            <input id="size__input" type="number" value="16">
-            <button id="size__bttn">Update</button>
+    <div id="header">Etch-a-Sketch</div>
+    <div id="main">
+        <div class="left sidebar">
+            <div>16 x 16</div>
+            <div id="slider__holder">
+                <input type="number" value = "16" id="size__input">
+                <div id="slider"></div>
+                <div id="slider__ball"></div>
+            </div>
+            <button class="top button" id="paint__bttn">Paint</button>
+            <button class="middle button" id="minesweeper__bttn">Minesweeper</button>
+            <button class="bottom button" id="snake__bttn">Snake</button>
         </div>
-        <div class="option" id="paint__div">
-            <button id="paint__bttn"></button>
-        </div>
-        <div class="option" id="minesweeper__div">
-            <button id="minesweeper__bttn"></button>
-        </div>
-        <div class="option" id="snake__div">
-            <button id="snake__bttn"></button>
-        </div>
-    </div>
-    <div class="grid"></div>
+        <div class="grid"></div>
 
-    <div class="right sidebar">hi
-        <div class="option">
-            <button class="button" id="bttn__updategrid">Update</button>
+        <div class="sidebar">
+            <button class="top button" id="color__bttn">Color</button>
+            <button class="middle button" id="white__bttn">White</button>
+            <button class="middle button" id="random__bttn">Random</button>
+            <button class="middle button" id="erase__bttn">Erase</button>
+            <button class="bottom button" id="clear__bttn">Clear</button>
         </div>
+
     </div>
+    <div id="footer">footer</div>
     <script src="app.js"></script>
 </body>
 </html>
