@@ -20,16 +20,24 @@ let innerBoxArray = [];
 buttonClear.addEventListener('click', clearGrid)
 buttonPaint.addEventListener('click', initializeGrid)
 buttonColor.addEventListener('click', function() {
-    brushColor = 'changing'
+    brushColor = 'changing';
+    removeSelected();
+    buttonColor.classList.add('selected');
 })
 buttonWhite.addEventListener('click', function() {
-    brushColor = 'white'
+    brushColor = 'white';
+    removeSelected();
+    buttonWhite.classList.add('selected');
 })
 buttonRandom.addEventListener('click', function() {
-    brushColor = 'random'
+    brushColor = 'random';
+    removeSelected();
+    buttonRandom.classList.add('selected');
 })
 buttonErase.addEventListener('click', function() {
-    brushColor = 'erase'
+    brushColor = 'erase';
+    removeSelected();
+    buttonErase.classList.add('selected');
 })
 //buttonSnake.addEventListener('click', playSnake)
 //buttonMinesweeper.addEventListener('click', playMinesweeper)
@@ -258,6 +266,20 @@ function fillColorEffect(targ,color) {
     }
 }
 
+function removeSelected() {
+    if (buttonColor.classList.contains('selected')) {
+        buttonColor.classList.remove('selected');
+    }
+    if (buttonWhite.classList.contains('selected')) {
+        buttonWhite.classList.remove('selected');
+    }
+    if (buttonRandom.classList.contains('selected')) {
+        buttonRandom.classList.remove('selected');
+    }
+    if (buttonErase.classList.contains('selected')) {
+        buttonErase.classList.remove('selected');
+    }
+}
 
 // Direction fxnArray Functions
 function topLeftMove(number, fxnArray, delaymillisecond = 80) {

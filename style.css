@@ -139,6 +139,11 @@ body {
     align-items: center;
 }
 
+.selected {
+    background-color: #d09292;
+    box-shadow: 0 0 4px 3px #86678e;
+}
+
 /* Snake Game */
 .apple {
     background-color: pink;
