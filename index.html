@@ -11,11 +11,10 @@
     <div id="header">Etch-a-Sketch</div>
     <div id="main">
         <div class="left sidebar">
-            <div>16 x 16</div>
             <div id="slider__holder">
-                <input type="number" value = "16" id="size__input">
-                <div id="slider"></div>
-                <div id="slider__ball"></div>
+                <output id="display__size"></output>
+                <input type="range" id="slider" name="volume"
+                        min="1" max="64" value="16" step="1">
             </div>
             <button class="top button selected" id="paint__bttn">Paint</button>
             <button class="middle button" id="minesweeper__bttn">Minesweeper</button>
@@ -32,7 +31,7 @@
         </div>
 
     </div>
-    <div id="footer">footer</div>
+    <div id="footer">Hello!</div>
     <script src="app.js"></script>
 </body>
 </html>

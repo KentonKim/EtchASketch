@@ -9,10 +9,16 @@ const colorArray            = ['#CC99C9', '#9EC1CF', '#9EE09E', '#FDFD97', '#FEB
 const buttonPaint           = document.querySelector('#paint__bttn') 
 const buttonMinesweeper     = document.querySelector('#minesweeper__bttn')
 const buttonSnake           = document.querySelector('#snake__bttn')
-let dimension = parseInt(document.querySelector('#size__input').value);
+const inputSize             = document.querySelector('#slider');
+const displaySize           = document.querySelector('#display__size');
+displaySize.textContent = inputSize.value + " x " + inputSize.value;
+inputSize.addEventListener('input', (e) => {
+    displaySize.textContent = e.target.value + " x " + inputSize.value;
+    
+})
+let dimension = parseInt(displaySize.textContent);
 let oldDimension = 0
 let brushColor = 'changing'
-let effectColor = 'white'
 let mouseDown = 0;
 let BoxArray = [];
 let innerBoxArray = [];
@@ -39,6 +45,8 @@ buttonErase.addEventListener('click', function() {
     removeSelected();
     buttonErase.classList.add('selected');
 })
+
+
 //buttonSnake.addEventListener('click', playSnake)
 //buttonMinesweeper.addEventListener('click', playMinesweeper)
 playPaint();
@@ -59,7 +67,7 @@ function playPaint() {
 function initializeGrid() {
     let delaymillisecond = clearGrid()
     setTimeout(() => {
-        dimension = parseInt(document.querySelector('#size__input').value);
+        dimension = parseInt(displaySize.textContent);
         if (dimension == oldDimension) {
             return
         }
