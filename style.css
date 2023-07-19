@@ -15,15 +15,20 @@ html {
 }
 body {
     height: 100%;
+    display: flex;
+    flex-flow: column;
 }
 
 #header {
     background-color: #202124;
     text-align: center;
+    flex: 1;
 }
 
 #footer {
     background-color: #202124;
+    text-align: center;
+    flex: 1;
 }
 
 #main {
@@ -32,6 +37,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-flow: wrap;
+    flex: 20;
     /*
     background-color: black;
     */

@@ -17,8 +17,20 @@ let mouseDown = 0;
 let BoxArray = [];
 let innerBoxArray = [];
 
-//buttonClear.addEventListener('click', clearGrid)
+buttonClear.addEventListener('click', clearGrid)
 buttonPaint.addEventListener('click', initializeGrid)
+buttonColor.addEventListener('click', function() {
+    brushColor = 'changing'
+})
+buttonWhite.addEventListener('click', function() {
+    brushColor = 'white'
+})
+buttonRandom.addEventListener('click', function() {
+    brushColor = 'random'
+})
+buttonErase.addEventListener('click', function() {
+    brushColor = 'erase'
+})
 //buttonSnake.addEventListener('click', playSnake)
 //buttonMinesweeper.addEventListener('click', playMinesweeper)
 playPaint();
@@ -95,6 +107,7 @@ function clearGrid() {
         eraseDelayMillisecond += 1000/(BoxArray.length) 
         setTimeout(() => {
             BoxArray[i].classList = ['box']
+            BoxArray[i].style.backgroundColor= '#323639';
         }, eraseDelayMillisecond);
     }
     return eraseDelayMillisecond
@@ -223,24 +236,27 @@ function animate(targ, RIPPlE_DURATION = 80) {
 
 function fillColorEffect(targ,color) {
     if (targ.classList.contains('box')){
-        targ.classList = 'box';
+        targ.classList.remove("black", "white", "random","changing");
         if (color == 'black') {
-            targ.classList += ' black';
+            targ.classList.add('black');
         }
         else if (color == 'white') {
-            targ.classList += ' white';
+            console.log('white successful')
+            targ.classList.add('white');
         }
         else if (color == 'random') {
-            /*
             let randomColor = Math.floor(Math.random() * 7);
             targ.style.backgroundColor = colorArray[randomColor];
-            */
         }
         else if (color == 'changing') {
-            targ.classList += ' changing';
+            targ.classList.add('changing');
+        }
+        else if (color == 'erase') {
+            targ.style.backgroundColor= '#323639';
         }
     }
 }
+
 
 // Direction fxnArray Functions
 function topLeftMove(number, fxnArray, delaymillisecond = 80) {
