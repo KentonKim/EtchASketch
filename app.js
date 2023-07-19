@@ -237,6 +237,7 @@ function animate(targ, RIPPlE_DURATION = 80) {
 function fillColorEffect(targ,color) {
     if (targ.classList.contains('box')){
         targ.classList.remove("black", "white", "random","changing");
+        targ.style.backgroundColor = "";
         if (color == 'black') {
             targ.classList.add('black');
         }
@@ -252,7 +253,7 @@ function fillColorEffect(targ,color) {
             targ.classList.add('changing');
         }
         else if (color == 'erase') {
-            targ.style.backgroundColor= '#323639';
+            targ.classList.remove("black", "white", "random","changing");
         }
     }
 }
